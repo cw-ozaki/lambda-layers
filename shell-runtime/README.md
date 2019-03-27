@@ -1,5 +1,7 @@
 # shell runtime
 
+Runtime for running Shell Script on AWS Lambda.
+
 ## Get Started
 
 ```bash
