@@ -1,0 +1,8 @@
+--- .tmp/bin/aws	2019-03-13 14:15:35.000000000 +0900
++++ .tmp/bin/aws2	2019-03-13 14:16:51.000000000 +0900
+@@ -1,4 +1,4 @@
+-#!/usr/local/bin/python
++#!/usr/bin/python2.7
+ # Copyright 2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+ # Licensed under the Apache License, Version 2.0 (the "License"). You
