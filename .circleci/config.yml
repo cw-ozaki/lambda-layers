@@ -1,0 +1,40 @@
+version: 2
+jobs:
+  build:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run: make ci:diff
+      - run: make ci:diff | xargs -I{} /bin/bash -c "cd ./{} && make || exit 255"
+  release:
+    docker:
+      - image: circleci/golang:1.8 #
+    steps:
+      - checkout
+      - run: go get -u github.com/aktau/github-release
+      - run: make ci:diff
+      - run: make ci:diff | xargs -I{} /bin/bash -c "cd ./{} && make || exit 255"
+      - run: git tag
+      - run:
+          name: release
+          command: |
+            github-release upload -u cw-ozaki -r lambda-layers -t "$CIRCLE_TAG" -n ${name:=`echo "$CIRCLE_TAG" | cut -d'/' -f 1`}.zip -f ${name}/${name}.zip
+
+workflows:
+  version: 2
+  integration:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - release:
+          requires:
+            - build
+          filters:
+            tags:
+              # e.g. shell-runtime/0.0.0
+              only: /^.*\/.*$/
+            branches:
+              ignore: /.*/
