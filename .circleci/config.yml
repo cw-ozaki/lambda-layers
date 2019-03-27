@@ -13,9 +13,10 @@ jobs:
     steps:
       - checkout
       - run: go get -u github.com/aktau/github-release
-      - run: make ci:diff
-      - run: make ci:diff | xargs -I{} /bin/bash -c "cd ./{} && make || exit 255"
-      - run: git tag
+      - run:
+          name: build
+          command: |
+            cd `echo "$CIRCLE_TAG" | cut -d'/' -f 1` && make
       - run:
           name: release
           command: |
