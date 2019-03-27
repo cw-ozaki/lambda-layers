@@ -8,8 +8,7 @@ jobs:
       - run: make ci:diff
       - run: make ci:diff | xargs -I{} /bin/bash -c "cd ./{} && make || exit 255"
   release:
-    docker:
-      - image: circleci/golang:1.8 #
+    machine: true
     steps:
       - checkout
       - run: go get -u github.com/aktau/github-release
