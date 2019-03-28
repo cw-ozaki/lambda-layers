@@ -1,8 +1,7 @@
 version: 2
 jobs:
   build:
-    machine:
-      docker_layer_caching: true
+    machine: true
     steps:
       - checkout
       - run: make ci:diff
@@ -11,13 +10,25 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: go get -u github.com/aktau/github-release
       - run:
-          name: build
+          name: Install awscli
+          command: pip install awscli
+      - run:
+          name: Install jq
+          command: sudo apt-get update && sudo apt-get install jq
+      - run:
+          name: Install github-release
+          command: go get -u github.com/aktau/github-release
+      - run:
+          name: Build
           command: |
             cd `echo "$CIRCLE_TAG" | cut -d'/' -f 1` && make
       - run:
-          name: release
+          name: Release to AWS
+          command: |
+            cd `echo "$CIRCLE_TAG" | cut -d'/' -f 1` && make release
+      - run:
+          name: Release to GitHub
           command: |
             github-release upload -u cw-ozaki -r lambda-layers -t "$CIRCLE_TAG" -n ${name:=`echo "$CIRCLE_TAG" | cut -d'/' -f 1`}.zip -f ${name}/${name}.zip
 
