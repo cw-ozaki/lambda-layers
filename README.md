@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/cw-ozaki/lambda-layers.svg?style=svg)](https://circleci.com/gh/cw-ozaki/lambda-layers)
 
-## Release
+## Release Manual
 
 1. Draft a new release
 2. Input
